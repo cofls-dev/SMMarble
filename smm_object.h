@@ -8,6 +8,9 @@
 #ifndef smm_object_h
 #define smm_object_h
 
+#define BOARDFILEPATH "marbleBoardConfig.txt"
+#define FOODFILEPATH "marbleFoodConfig.txt"
+#define FESTFILEPATH "marbleFestivalConfig.txt"
 
 
 /* node type :

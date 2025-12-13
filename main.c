@@ -202,7 +202,7 @@ void actionNode(int player)
     		grade = rand()%SMMNODE_MAX_GRADE; //성적 중 하나 랜덤 
     		
     		gradePtr = smmObj_genObject(smmObj_getObjectName(ptr), SMMNODE_OBJTYPE_GRADE,
-			                 type, credit, energy, 0, grade); 
+			                 type, credit, energy, "", grade); 
 			smmdb_addTail(LISTNO_OFFSET_GRADE+player,gradePtr);
 			
 			printf("lecture grade is : %d\n", grade); //과목 성적 출력  
@@ -301,7 +301,7 @@ int main(int argc, const char * argv[]) {
     {
         //store the parameter set
         void* ptr;
-        ptr = smmObj_genObject(name, SMMNODE_OBJTYPE_BOARD, type, credit, energy, 0, 0);
+        ptr = smmObj_genObject(name, SMMNODE_OBJTYPE_BOARD, type, credit, energy, "", 0);
         smm_board_nr = smmdb_addTail(LISTNO_NODE, ptr);
     }
     fclose(fp);
@@ -321,7 +321,7 @@ int main(int argc, const char * argv[]) {
     {
         //store the parameter set
         void* ptr;
-        ptr = smmObj_genObject(name, SMMNODE_OBJTYPE_FOOD, 0, 0, energy, 0, 0);
+        ptr = smmObj_genObject(name, SMMNODE_OBJTYPE_FOOD, 0, 0, energy, "", 0);
         smm_food_nr = smmdb_addTail(LISTNO_FOODCARD, ptr);
     }
     fclose(fp);
@@ -341,7 +341,7 @@ int main(int argc, const char * argv[]) {
     {
         //store the parameter set
         void* ptr;
-        ptr = smmObj_genObject(0, SMMNODE_OBJTYPE_FEST, 0, 0, 0, message, 0);
+        ptr = smmObj_genObject("", SMMNODE_OBJTYPE_FEST, 0, 0, 0, message, 0);
         smm_festival_nr = smmdb_addTail(LISTNO_FESTCARD, ptr);
     }
     fclose(fp);
