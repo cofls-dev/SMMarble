@@ -25,6 +25,7 @@ static node_t* listPtr[MAX_LIST];
 static int list_cnt[MAX_LIST];
 
 
+
 //Inner functions (cannot used at the outside of this file)
 static node_t* genNode(void)
 {
