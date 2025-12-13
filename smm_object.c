@@ -8,6 +8,7 @@
 #include "smm_common.h"
 #include "smm_object.h"
 #include <string.h>
+#include <stdlib.h>
 
 #define MAX_NODENR      100
 #define MAX_NODETYPE    7
@@ -31,6 +32,10 @@ static char smmNodeName[MAX_NODETYPE][MAX_CHARNAME] = {
        "festival"
 };
 
+#define SMMOBJ_TYPE_NODE        0
+#define SMMOBJ_TYPE_FOOD        1
+#define SMMOBJ_TYPE_FESTIVAL    2
+
 static int smm_nodeNr = 0;
 static char smm_name[MAX_NODENR][MAX_CHARNAME];
 static int smm_type[MAX_NODENR];
@@ -50,6 +55,27 @@ int smmObj_genNode(char* name, int type, int credit, int energy)
     return (smm_nodeNr);
 }
 
+int smmObj_genFood(char* name, int energy)
+{
+    strcpy(smm_name[smm_nodeNr], name);
+    smm_type[smm_nodeNr] = SMMOBJ_TYPE_FOOD;
+    smm_energy[smm_nodeNr] = energy;
+    
+    smm_nodeNr++;
+    
+    return (smm_nodeNr);
+}
+
+int smmObj_genFestival(char* message)
+{
+    strcpy(smm_name[smm_nodeNr], message);
+    smm_type[smm_nodeNr] = SMMOBJ_TYPE_FESTIVAL;
+
+    
+    smm_nodeNr++;
+    
+    return (smm_nodeNr);
+}
 
 
 //member retrieving
@@ -57,6 +83,7 @@ char* smmObj_getName (int node_nr)
 {
 	return (smm_name[node_nr]);
 }
+
 
 int smmObj_getName (int node_nr)
 {
@@ -67,6 +94,7 @@ char* smmObj_getTypeName (int node_nr)
 {
 	return (smmNodename[smm_type[node_nr]]);
 }
+
 
 
 #if 0

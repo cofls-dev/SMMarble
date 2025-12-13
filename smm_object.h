@@ -8,6 +8,8 @@
 #ifndef smm_object_h
 #define smm_object_h
 
+
+
 /* node type :
     lecture,
     restaurant,
@@ -34,10 +36,12 @@
 
 
 //object generation
-int smmObj_genNode(char* name, int type, int credit, int energy);
+int smmObj_genNode(char* name, int type, int credit, int energy); 
+int smmObj_genFood(char* name, int energy);
+int smmObj_genFestival(char* message); 
 
 //member retrieving
-
+char smmObj_getName(void* Obj);
 
 //element to string
 

@@ -42,18 +42,18 @@ void* findGrade(int player, char *lectureName); //find the grade from the player
 void printGrades(int player); //print all the grade history of the player
 #endif
 
-void printPlayerStatus(void);
+void printPlayerStatus(void)
 {
 	int i;
-	for (i=0;i<n;i++)
+	for (i=0;i<player_nr;i++)
 	{
-        printf("%s - position:%i(%s), credit:%i, energy:%i\n");
-                    player_name[i], player_pos[i], smmObj_gerName(Player_pos[i]), player_credit[i], player_energy[i]
+        printf("%s - position:%i(%s), credit:%i, energy:%i\n",
+                    player_name[i], player_pos[i], smmObj_getName(player_pos[i]), player_credit[i], player_energy[i]);
         
 	}
 }
 
-void generatePlayers(int n, int initEnergy); //generate a new player
+void generatePlayers(int n, int initEnergy) //generate a new player
 {
 	int i;
 	for (i=0;i<n;i++)
@@ -143,9 +143,10 @@ int main(int argc, const char * argv[]) {
     }
     
     printf("\n\nReading food card component......\n");
-    while () //read a food parameter set
+    while ( fscanf(fp, "%s %d", name, &energy) == 2) //read a food parameter set
     {
         //store the parameter set
+        food_nr = smmObj_genFood(name, energy);
     }
     fclose(fp);
     printf("Total number of food cards : %i\n", food_nr);
@@ -160,9 +161,10 @@ int main(int argc, const char * argv[]) {
     }
     
     printf("\n\nReading festival card component......\n");
-    while () //read a festival card string
+    while (fscanf(fp, "%s", name) == 1) //read a festival card string
     {
         //store the parameter set
+        festival_nr = smmObj_genFestival(name);
     }
     fclose(fp);
     printf("Total number of festival cards : %i\n", festival_nr);
