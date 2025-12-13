@@ -50,7 +50,7 @@ static char smmObj_nodeName[MAX_NODETYPE][MAX_CHARNAME] = {
        "festival"
 };
 
-static char smmObj_foodName[MAX_FOODTYPE][MAX_CHARNAME] = {
+static char smmObj_foodName[SMMNODE_MAX_FOODTYPE][MAX_CHARNAME] = {
        "chicken",
        "beer",
        "tanghulu",
@@ -149,7 +149,7 @@ char* smmObj_getTypeName (void *ptr)
 {
 	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
 	 
-	return (objPtr);
+	return (objPtr->type);
 }
 
 char* smmObj_getObjectMessage (void *ptr) 

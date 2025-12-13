@@ -117,10 +117,9 @@ void printPlayerStatus(void) //print all player status at the beginning of each 
 	int i;
 	void *ptr;
 	
-	ptr = smmdb_getData(LISTNO_NODE, smm_players[i].pos);
-	
 	for (i=0;i<smm_player_nr;i++)
 	{
+		ptr = smmdb_getData(LISTNO_NODE, smm_players[i].pos);
         printf("%s - position:%i(%s), credit:%i, energy:%i\n",
                     smm_players[i].name, smm_players[i].pos, smmObj_getObjectName(ptr), smm_players[i].credit, smm_players[i].energy);
         
@@ -170,56 +169,97 @@ void actionNode(int player)
 {
 	void *ptr;
 	
-	ptr = ptr = smmdb_getData(LISTNO_NODE, smm_players[player].pos);
+	ptr = smmdb_getData(LISTNO_NODE, smm_players[player].pos);
 	
 	int type = smmObj_getObjectType(ptr);
 	int credit = smmObj_getObjectCredit(ptr);
 	int energy = smmObj_getObjectEnergy(ptr);
 	int grade;
+	int i;
+	int food;
+	int festival;
+	char answer;
 	void *gradePtr;
+	void *foodPtr;
+	void *festPtr;
 	
 	printf("--> player%i pos : %i, type : %s, credit : %i, energy : %i\n", 
-	            player, smm_players[player].pos, smmObj_getTypeName(type), credit, energy);
+	            player, smm_players[player].pos, smmObj_getTypeName(ptr), credit, energy);
 	
     switch(type)
     {
-    	case SMMNODE_TYPE_LECTURE :
-    	if(findGrade(player, smmObj_getObjectName(ptr)) == NULL)
-    	{
-			
-    		smm_players[player].credit += credit;
-    		smm_players[player].energy -= energy;
+    	case SMMNODE_TYPE_LECTURE : //강의  
+    	printf("Do you want to take this lecture? : "); //수강 여부 선택  
+    	scanf("%c", &answer);
     		
-    		grade = rand()%SMMNODE_MAX_GRADE;
+    	if(answer == 'y') //수강 여부 확인   
+    	{
+		  if(findGrade(player, smmObj_getObjectName(ptr)) == NULL)
+    	  {
+    		smm_players[player].credit += credit; //과목 학점을 현재 학점에 더함  
+    		smm_players[player].energy -= energy; //과목 소모 에너지를 현재 에너지에서 뺌  
+    		
+    		grade = rand()%SMMNODE_MAX_GRADE; //성적 중 하나 랜덤 
     		
     		gradePtr = smmObj_genObject(smmObj_getObjectName(ptr), SMMNODE_OBJTYPE_GRADE,
-			                 type, credit, energy, 0, grade);
+			                 type, credit, energy, 0, grade); 
 			smmdb_addTail(LISTNO_OFFSET_GRADE+player,gradePtr);
+			
+			printf("lecture grade is : %d\n", grade); //과목 성적 출력  
+          }
         }
+         else
+		  { 
+		    printf("lecture dropped\n"); //수강 안 함  출력  
+		  } 
     	break;
     		
-        case SMMNODE_TYPE_RESTAURANT :
-    		smm_players[player].energy += energy;
+        case SMMNODE_TYPE_RESTAURANT : //식당  
+    		smm_players[player].energy += energy; //보충에너지가 현재 에너지에 더해짐  
         	break;
         	
-        case SMMNODE_TYPE_LABORATORY :
+        case SMMNODE_TYPE_LABORATORY : //실험실  
+            printf("you are in the laboratory.\n");
         	break;
         	
-        case SMMNODE_TYPE_HOME :
-    		smm_players[player].energy += energy;
-    		if (smm_players[player].credit >= GRADUATE_CREDIT)  
+        case SMMNODE_TYPE_HOME : //집  
+    		smm_players[player].energy += energy; //집에서 에너지 보충  
+    		if (smm_players[player].credit >= GRADUATE_CREDIT) //졸업 학점 넘었는지 확인  
 			{
-				smm_players[player].flag_graduated = 1; 
+				smm_players[player].flag_graduated = 1; //졸업 플래그 설정  
 			}
         	break;
+        #if 0	
+        case SMMNODE_TYPE_GOTOLAB : //실험
+		    for (i=0;i<smm_board_nr;i++)
+		    {
+		    	void *node = smmdb_getData(LISTNO_NODE, i);
+		    	if(smmObj_getObjectType(node) == SMMNODE_TYPE_LABORATORY)
+		    	{
+				}
+			}		  
+        	break;
+        #endif
         	
-        case SMMNODE_TYPE_GOTOLAB :
+        case SMMNODE_TYPE_FOODCHANCE : //보충 찬스  
+        	if(smmdb_len(LISTNO_FOODCARD) > 0)
+        	{
+        	food = rand()%SMMNODE_MAX_FOODTYPE; //음식 카드 한장을 랜덤으로 뽑음  
+        	
+        	foodPtr = smmdb_getData(LISTNO_FOODCARD, food); 
+        	int gain = smmObj_getObjectEnergy(foodPtr);
+        	smm_players[player].energy += gain; //명시된 보충 에너지를 현재 에너지에 더함  
+            }
         	break;
         	
-        case SMMNODE_TYPE_FOODCHANCE :
-        	break;
+        case SMMNODE_TYPE_FESTIVAL : //축제  
+        	if(smmdb_len(LISTNO_FESTCARD) > 0)
+        	{
+        	festival = rand()%SMMNODE_MAX_FOODTYPE; //축제 카드 한장을 랜덤으로 뽑음  
         	
-        case SMMNODE_TYPE_FESTIVAL :
+        	festPtr = smmdb_getData(LISTNO_FESTCARD, festival);
+        	printf ("festival mission : %s\n", smmObj_getObjectMessage(festPtr)); //카드에 적힌 미션 수행  
+            }
         	break;
         	
         //case lecture:
@@ -350,9 +390,17 @@ int main(int argc, const char * argv[]) {
 		//4-4. take action at the destination node of the board
         actionNode(turn);
         
+        if(smm_players[turn].flag_graduated == 1) //졸업 조건 확인  
+            {
+        		printf("player %d (%s) graduated!\n",turn, smm_players[turn].name); //졸업생 정보 출력  
+        		printGrades(turn); //성적 출력  
+        		
+        		break;
+			}
+		
         //4-5. next turn
-        
         turn = (turn + 1)%smm_player_nr; //다음플레이어턴  
+      
     
     }
 

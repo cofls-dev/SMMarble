@@ -20,6 +20,7 @@
     festival
 */
 #define SMMNODE_MAX_GRADE       13
+#define SMMNODE_MAX_FOODTYPE    14
 
 #define SMMNODE_TYPE_LECTURE         0
 #define SMMNODE_TYPE_RESTAURANT      1
@@ -34,19 +35,19 @@
 #define SMMNODE_OBJTYPE_FOOD       2
 #define SMMNODE_OBJTYPE_FEST       3
 
-#define GRADE_A+           0
-#define GRADE_A0           1
-#define GRADE_A-           2
-#define GRADE_B+           3
-#define GRADE_B0           4
-#define GRADE_B-           5
-#define GRADE_C+           6
-#define GRADE_C0           7
-#define GRADE_C-           8
-#define GRADE_D+           9
-#define GRADE_D0           10
-#define GRADE_D-           11
-#define GRADE_F            12
+#define GRADE_A_PLUS           0
+#define GRADE_A0               1
+#define GRADE_A_MINUS          2
+#define GRADE_B_PLUS           3
+#define GRADE_B0               4
+#define GRADE_B_MINUS          5
+#define GRADE_C_PLUS           6
+#define GRADE_C0               7
+#define GRADE_C_MINUS          8
+#define GRADE_D_PLUS           9
+#define GRADE_D0               10
+#define GRADE_D_MINUS          11
+#define GRADE_F                12
 
 
 /* grade :
