@@ -12,13 +12,32 @@
 
 #define MAX_NODENR      100
 #define MAX_NODETYPE    7
-#define MAX_GRADE       9
 
+#define MAX_FOODTYPE    14
 #define MAX_FOODNR      100
 #define MAX_FOODENERGY  100
 
 #define MAX_FESTIVALNR  100
 
+#define OBJTYPE_BOARD      0
+#define OBJTYPE_GRADE      1
+#define OBJTYPE_FOOD       2
+#define OBJTYPE_FESTIVAL   3
+
+#define FOOD_CHICKEN       0
+#define FOOD_BEER          1
+#define FOOD_TANGHULU      2
+#define FOOD_CUPRAMEN      3
+#define FOOD_GAMJATANG     4
+#define FOOD_CUPRICE       5
+#define FOOD_BLACKNOODLES  6
+#define FOOD_SCHOOLFOOD    7
+#define FOOD_PASTA         8
+#define FOOD_PIZZA         9
+#define FOOD_HAMBURGER     10
+#define FOOD_SANDWICH      11
+#define FOOD_YOGURT        12
+#define FOOD_BIBIMBAP      13
 
 
 static char smmObj_nodeName[MAX_NODETYPE][MAX_CHARNAME] = {
@@ -31,109 +50,128 @@ static char smmObj_nodeName[MAX_NODETYPE][MAX_CHARNAME] = {
        "festival"
 };
 
+static char smmObj_foodName[MAX_FOODTYPE][MAX_CHARNAME] = {
+       "chicken",
+       "beer",
+       "tanghulu",
+       "cupramen",
+       "gamjatang",
+       "cuprice",
+       "blacknoodle",
+       "schoolfood",
+       "pasta",
+       "pizza",
+       "hamburger",
+       "sandwich",
+       "yogurt",
+       "bibimbap"
+};
 
-static int smmObj_nodeNr = 0;
-static int smmObj_foodNr = 0;
-static int smmObj_festivalNr = 0;
+static char smmObj_gradeName[SMMNODE_MAX_GRADE][MAX_CHARNAME] = {
+       "A+",
+       "A0",
+       "A-",
+       "B+",
+       "B0",
+       "B-",
+       "C+",
+       "C0",
+       "C-",
+       "D+",
+       "D0",
+       "D-",
+       "F"
+};
+
 
 //structure type definition 
 
 typedef struct {
 	char name[MAX_CHARNAME];
+	int objType;
 	int type;
 	int credit;
 	int energy;
-} smmObj_board_t;
-
-typedef struct {
-	char name[MAX_CHARNAME];
-	int energy;
-} smmObj_food_t;
-
-typedef struct {
 	char message[MAX_CHARNAME];
-} smmObj_festival_t;
-
-//structure instance array definition 
-static smmObj_board_t smmObj_board[MAX_NODENR];
-static smmObj_food_t smmObj_food[MAX_FOODNR];
-static smmObj_festival_t smmObj_festival[MAX_FESTIVALNR];
+	int grade;
+} smmObj_object_t;
 
 //object generation
-int smmObj_genNode(char* name, int type, int credit, int energy)
+void* smmObj_genObject(char* name, int objType, int type, int credit, int energy, char* message, int grade)
 {
-    strcpy(smmObj_board[smmObj_nodeNr].name, name);
-	smmObj_board[smmObj_nodeNr].type = type;
-    smmObj_board[smmObj_nodeNr].credit = credit;
-    smmObj_board[smmObj_nodeNr].energy = energy;
+	smmObj_object_t* ptr;
+	
+	ptr = (smmObj_object_t*)malloc(sizeof(smmObj_object_t));
+	
+    strcpy(ptr->name, name);
+    ptr->objType = objType;
+	ptr->type = type;
+    ptr->credit = credit;
+    ptr->energy = energy;
+    strcpy(ptr->message, message);
+    ptr->grade = grade;
     
-    smmObj_nodeNr++;
-    
-    return (smmObj_nodeNr);
-}
-
-int smmObj_genFood(char* name, int energy)
-{
-    strcpy(smmObj_food[smmObj_foodNr].name, name);
-    smmObj_food[smmObj_foodNr].energy = energy;
-    
-    smmObj_foodNr++;
-    
-    return (smmObj_foodNr);
-}
-
-int smmObj_genFestival(char* message)
-{
-    strcpy(smmObj_festival[smmObj_festivalNr].message, message);
-
-    smmObj_festivalNr++;
-    
-    return (smmObj_festivalNr);
+    return ((void*)ptr);
 }
 
 
 //member retrieving
 
-char* smmObj_getNodeName (int node_nr) //node name
+char* smmObj_getObjectName (void *ptr) 
 {
-	return (smmObj_board[node_nr].name);
+	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
+	
+	return (objPtr->name);
 }
 
-int smmObj_getNodeType (int node_nr) //node type
+int smmObj_getObjectObjType (void *ptr) 
 {
-	return (smmObj_board[node_nr].type);
+	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
+	
+	return (objPtr->objType);
 }
 
-int smmObj_getNodeEnergy(int node_nr) //node energy
+int smmObj_getObjectType (void *ptr) 
 {
-	return (smmObj_board[node_nr].energy);
+	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
+	
+	return (objPtr->type);
 }
 
-char* smmObj_getTypeName (int node_type)
+int smmObj_getObjectEnergy(void *ptr) 
 {
-	return (smmObj_nodeName[node_type]);
+	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
+	
+	return (objPtr->energy);
 }
 
-char* smmObj_getFoodName (int food_nr) //food name
+char* smmObj_getTypeName (void *ptr)
 {
-	return (smmObj_food[food_nr].name);
+	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
+	 
+	return (objPtr);
 }
 
-int smmObj_getFoodEnergy(int food_nr) //food energy
+char* smmObj_getObjectMessage (void *ptr) 
 {
-	return (smmObj_food[food_nr].energy);
+	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
+	
+	return (objPtr->message);
 }
 
-char* smmObj_getFestivalMessage (int festival_nr) //festival message
+int smmObj_getObjectCredit (void *ptr) 
 {
-	return (smmObj_festival[festival_nr].message);
+	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
+	
+	return (objPtr->credit);
 }
 
-int smmObj_getNodeCredit (int node_nr) //player credit
+int smmObj_getObjectGrade (void *ptr) 
 {
-	return (smmObj_board[node_nr].credit);
+	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
+	
+	return (objPtr->grade);
 }
-
 
 
 #if 0
