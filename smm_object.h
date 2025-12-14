@@ -8,12 +8,9 @@
 #ifndef smm_object_h
 #define smm_object_h
 
-#define BOARDFILEPATH "marbleBoardConfig.txt"
-#define FOODFILEPATH "marbleFoodConfig.txt"
-#define FESTFILEPATH "marbleFestivalConfig.txt"
 
 
-/* node type :
+/*node type :
     lecture,
     restaurant,
     laboratory,
@@ -22,7 +19,9 @@
     foodChance,
     festival
 */
+
 #define SMMNODE_MAX_GRADE       13
+#define SMMNODE_MAX_DIE         6
 #define SMMNODE_MAX_FOODTYPE    14
 
 #define SMMNODE_TYPE_LECTURE         0
@@ -53,7 +52,7 @@
 #define GRADE_F                12
 
 
-/* grade :
+/*grade :
     A+,
     A0,
     A-,
@@ -82,7 +81,7 @@ int smmObj_getObjectGrade (void *ptr);
 
 
 //element to string
-
+char* smmObj_getGradeName(int grade);
 
 
 #endif /* smm_object_h */

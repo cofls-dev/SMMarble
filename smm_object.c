@@ -86,7 +86,6 @@ static char smmObj_gradeName[SMMNODE_MAX_GRADE][MAX_CHARNAME] = {
 
 
 //structure type definition 
-
 typedef struct {
 	char name[MAX_CHARNAME];
 	int objType;
@@ -95,7 +94,8 @@ typedef struct {
 	int energy;
 	char message[MAX_CHARNAME];
 	int grade;
-} smmObj_object_t;
+} smmObj_object_t; //게임 보드 구조체화  
+
 
 //object generation
 void* smmObj_genObject(char* name, int objType, int type, int credit, int energy, char* message, int grade)
@@ -118,56 +118,56 @@ void* smmObj_genObject(char* name, int objType, int type, int credit, int energy
 
 //member retrieving
 
-char* smmObj_getObjectName (void *ptr) 
+char* smmObj_getObjectName (void *ptr) //이름  
 {
 	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
 	
 	return (objPtr->name);
 }
 
-int smmObj_getObjectObjType (void *ptr) 
+int smmObj_getObjectObjType (void *ptr) //분류  
 {
 	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
 	
 	return (objPtr->objType);
 }
 
-int smmObj_getObjectType (void *ptr) 
+int smmObj_getObjectType (void *ptr) //타입  
 {
 	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
 	
 	return (objPtr->type);
 }
 
-int smmObj_getObjectEnergy(void *ptr) 
+int smmObj_getObjectEnergy(void *ptr) //에너지  
 {
 	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
 	
 	return (objPtr->energy);
 }
 
-char* smmObj_getTypeName (void *ptr)
+char* smmObj_getTypeName (void *ptr) //타입 이름  
 {
 	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
 	 
 	return (objPtr->type);
 }
 
-char* smmObj_getObjectMessage (void *ptr) 
+char* smmObj_getObjectMessage (void *ptr) //내용  
 {
 	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
 	
 	return (objPtr->message);
 }
 
-int smmObj_getObjectCredit (void *ptr) 
+int smmObj_getObjectCredit (void *ptr) //학점  
 {
 	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
 	
 	return (objPtr->credit);
 }
 
-int smmObj_getObjectGrade (void *ptr) 
+int smmObj_getObjectGrade (void *ptr) //성적  
 {
 	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
 	
@@ -175,11 +175,8 @@ int smmObj_getObjectGrade (void *ptr)
 }
 
 
-#if 0
 //element to string
-
-char* smmObj_getGradeName(smmGrade_e grade)
+char* smmObj_getGradeName(int grade) //성적 이름  
 {
-    return smmGradeName[grade];
+    return smmObj_gradeName[grade];
 }
-#endif
