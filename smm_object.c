@@ -11,6 +11,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+
 #define MAX_NODENR      100
 #define MAX_NODETYPE    7
 
@@ -150,7 +151,7 @@ char* smmObj_getTypeName (void *ptr) //타입 이름
 {
 	smmObj_object_t* objPtr = (smmObj_object_t*)ptr;
 	 
-	return (objPtr->type);
+	return smmObj_nodeName[objPtr->type];
 }
 
 char* smmObj_getObjectMessage (void *ptr) //내용  

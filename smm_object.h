@@ -20,6 +20,7 @@
     festival
 */
 
+
 #define SMMNODE_MAX_GRADE       13
 #define SMMNODE_MAX_DIE         6
 #define SMMNODE_MAX_FOODTYPE    14

@@ -20,6 +20,7 @@ typedef struct node{
 } node_t;
 
 
+
 static node_t* list_database[MAX_LIST];
 static node_t* listPtr[MAX_LIST];
 static int list_cnt[MAX_LIST];
