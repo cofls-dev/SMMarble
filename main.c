@@ -36,13 +36,6 @@ smm_player_t *smm_players;
 void generatePlayers(int n, int initEnergy); //generate a new player
 void printPlayerStatus(void); //print all player status at the beginning of each turn
 
-//function prototypes
-#if 0
-float calcAverageGrade(int player); //calculate average grade of the player
-smmGrade_e takeLecture(int player, char *lectureName, int credit); //take the lecture (insert a grade of the player)
-void printGrades(int player); //print all the grade history of the player
-#endif
-
 void printGrades(int player) //print grade history of the player
 {
 	int size = smmdb_len(LISTNO_OFFSET_GRADE+player); //플레이어 학점 데이터 개수   
@@ -199,30 +192,30 @@ void actionNode(int player)
     switch(type)
     {
     	case SMMNODE_TYPE_LECTURE : //강의  
-    	printf("Do you want to take this lecture? y/n : "); //수강 여부 선택  
-    	scanf("%c", &answer);
+    	    printf("Do you want to take this lecture? y/n : "); //수강 여부 선택  
+    	    scanf("%c", &answer);
     		
-    	if(answer == 'y') //수강 여부 확인   
-    	{
-		  if(findGrade(player, smmObj_getObjectName(ptr)) == NULL)
-    	  {
-    		smm_players[player].credit += credit; //과목 학점을 현재 학점에 더함  
-    		smm_players[player].energy -= energy; //과목 소모 에너지를 현재 에너지에서 뺌  
+    	    if(answer == 'y') //수강 여부 확인   
+    	    {
+		      if(findGrade(player, smmObj_getObjectName(ptr)) == NULL)
+    	      {
+    	        smm_players[player].credit += credit; //과목 학점을 현재 학점에 더함  
+    		    smm_players[player].energy -= energy; //과목 소모 에너지를 현재 에너지에서 뺌  
     		
-    		grade = rand()%SMMNODE_MAX_GRADE; //성적 중 하나 랜덤 배정  
+    		    grade = rand()%SMMNODE_MAX_GRADE; //성적 중 하나 랜덤 배정  
     		
-    		gradePtr = smmObj_genObject(smmObj_getObjectName(ptr), SMMNODE_OBJTYPE_GRADE,
+    		    gradePtr = smmObj_genObject(smmObj_getObjectName(ptr), SMMNODE_OBJTYPE_GRADE,
 			                 type, credit, energy, "", grade); 
-			smmdb_addTail(LISTNO_OFFSET_GRADE+player,gradePtr);
+			    smmdb_addTail(LISTNO_OFFSET_GRADE+player,gradePtr);
 			
-			printf("player %i : %s's lecture grade is : %d\n", player, smm_players[player].name, grade); //과목 성적 출력  
-          }
-        }
-         else
-		  { 
-		    printf("lecture dropped.\n"); //수강 안 함  출력  
-		  } 
-    	break;
+			    printf("player %i : %s's lecture grade is : %d\n", player, smm_players[player].name, grade); //과목 성적 출력  
+              }
+            }
+            else
+		    { 
+		      printf("lecture dropped.\n"); //수강 안 함  출력  
+		    } 
+    	    break;
     		
     		
         case SMMNODE_TYPE_RESTAURANT : //식당  
