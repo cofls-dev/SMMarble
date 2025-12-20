@@ -26,6 +26,7 @@ typedef struct {
 	int pos;
 	int credit;
 	int energy;
+	int grade;
 	int flag_graduated;
 	int flag_experiment;
 	int experinmet_criteria;
@@ -35,6 +36,42 @@ smm_player_t *smm_players;
 
 void generatePlayers(int n, int initEnergy); //generate a new player
 void printPlayerStatus(void); //print all player status at the beginning of each turn
+
+
+float calcAverageGrade(int player)  //calculate average grade of the player
+{
+	int size = smmdb_len(LISTNO_OFFSET_GRADE+player); // 수강 과목 수
+	int i;
+	
+    if (size == 0) //수강 과목 없을 경우  
+	{
+		printf("Averagegrade is 0.\n");
+		return 0;
+	}
+	
+	float grade_points[] = {4.3, 4.0, 3.7, 3.3, 3.0, 2.7, 2.3, 2.0, 1.7, 1.3, 1.0, 0.7, 0.0};
+
+    float weighted_point = 0;
+    int total_credit = 0;
+
+    for(i=0;i<size;i++) 
+	{
+        int grade;
+		int credit;
+		
+		void *ptr = smmdb_getData(LISTNO_OFFSET_GRADE + player, i); // 성적 데이터 가져옴
+        
+        grade = smmObj_getObjectGrade(ptr); 
+        credit = smmObj_getObjectCredit(ptr);   
+
+        weighted_point += (grade_points[grade] * credit); // (평점 * 학점) 누적
+        total_credit += credit; // 총 학점 누적
+    }
+
+    return weighted_point / (float)total_credit; // 평균 반환
+}
+
+
 
 void printGrades(int player) //print grade history of the player
 {
@@ -56,6 +93,10 @@ void printGrades(int player) //print grade history of the player
 		printf("lecture : %s, credit : %d, grade : %s\n", smmObj_getObjectName(ptr), 
 		                    smmObj_getObjectCredit(ptr), smmObj_getGradeName(smmObj_getObjectGrade(ptr))); //성적 출력  
 	}
+	
+	float AverageGrade = calcAverageGrade(player);
+    printf(" Total Earned Credits : %d/%d, Averagegrade : %.2f\n\n", smm_players[player].credit, GRADUATE_CREDIT, 
+	                                                                 AverageGrade);
 	
 }
 
